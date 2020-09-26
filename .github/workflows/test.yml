@@ -1,0 +1,34 @@
+name: Test Action
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  ghcr:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - id: push
+      run: |
+        echo ::set-output name=sha::sha-${GITHUB_SHA:0:7}
+    - name: Add One Tag
+      uses: ./
+      with:
+        registry: ghcr.io
+        token: ${{ secrets.GHCR_PAT }}
+        repository: shrink/actions-docker-registry-tag
+        target: sha-8d447bc
+        tags: example-${{ steps.push.outputs.sha }}-a
+    - name: Add Multiple Tags
+      uses: ./
+      with:
+        registry: ghcr.io
+        token: ${{ secrets.GHCR_PAT }}
+        repository: shrink/actions-docker-registry-tag
+        target: sha-8d447bc
+        tags: |
+          example-${{ steps.push.outputs.sha }}-b
+          example-${{ steps.push.outputs.sha }}-c
+          latest
