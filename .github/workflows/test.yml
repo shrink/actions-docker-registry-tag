@@ -53,7 +53,7 @@ jobs:
         do
           IMAGE="${TEST_REGISTRY}/${TEST_REPOSITORY}:${tag}"
           if docker manifest inspect $IMAGE >/dev/null; then
-            echo "::debug::$tag found, test passed"
+            echo "$tag found, test passed"
           else
             echo "::error::$tag not found, test failed"
           fi
