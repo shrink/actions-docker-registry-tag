@@ -47,7 +47,6 @@ jobs:
           multiple-b
     - name: Assert Image Has Tags
       run: |
-        echo "::group::Assertions"
         TAGS=('single' 'multiple-a' 'multiple-b')
         for tag in "${TAGS[@]}"
         do
@@ -58,7 +57,6 @@ jobs:
             echo "::error::$tag not found, test failed"
           fi
         done
-        echo "::endgroup::"
     - name: Clean Up Image
       if: always()
       run: docker rmi --force $TEST_IMAGE
