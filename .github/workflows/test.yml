@@ -34,7 +34,7 @@ jobs:
         token: ${{ secrets.GHCR_PAT }}
         repository: ${{ env.TEST_REPOSITORY }}
         target: ${{ env.TEST_TAG }}
-        tags: single
+        tags: ${{ github.run_id }}-single
     - name: Add Multiple Tags
       uses: ./
       with:
@@ -43,20 +43,18 @@ jobs:
         repository: ${{ env.TEST_REPOSITORY }}
         target: ${{ env.TEST_TAG }}
         tags: |
-          multiple-a
-          multiple-b
+          ${{ github.run_id }}-multiple-a
+          ${{ github.run_id }}-multiple-b
     - name: Assert Image Has Tags
       run: |
         TAGS=('single' 'multiple-a' 'multiple-b')
         for tag in "${TAGS[@]}"
         do
-          IMAGE="${TEST_REGISTRY}/${TEST_REPOSITORY}:${tag}"
+          IMAGE="${TEST_IMAGE}-${tag}"
           if docker manifest inspect $IMAGE >/dev/null; then
-            echo "pass: $tag found"
+            echo "pass: $IMAGE found"
           else
-            echo "::error::$tag not found, test failed"
+            echo "fail: $IMAGE not found"
+            echo "::error::$IMAGE not found, test failed"
           fi
         done
-    - name: Clean Up Image
-      if: always()
-      run: docker rmi --force $TEST_IMAGE
