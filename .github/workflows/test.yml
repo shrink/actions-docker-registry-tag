@@ -19,6 +19,12 @@ jobs:
       TEST_IMAGE: ${{ github.repository }}-test:${{ github.run_id }}
     steps:
     - uses: actions/checkout@v2
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_PAT }}
       # A GitHub Action re-run shares the same run ID as the first run. To avoid
       # a test unintentionally passing due to tags leaking between re-runs, we
       # generate a unique value here (using the time of the current run) so that
