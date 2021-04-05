@@ -10,12 +10,12 @@ on:
 jobs:
   ghcr:
     runs-on: ubuntu-latest
+    # There is no known limit of the number of tags an image in the GitHub
+    # container registry can have, however to avoid any unexpected behaviour
+    # we are creating a new image for each run.
     env:
       TEST_REPOSITORY=${{ github.repository }}-test
       TEST_TAG=${{ github.run_id }}
-      # There is no known limit of the number of tags an image in the GitHub
-      # container registry can have, however to avoid any unexpected behaviour
-      # we are creating a new image for each run.
       TEST_IMAGE=${{ github.repository }}-test:${{ github.run_id }}
     steps:
     - uses: actions/checkout@v2
