@@ -11,9 +11,10 @@ jobs:
   ghcr:
     runs-on: ubuntu-latest
     env:
-      TEST_REPOSITORY: ghcr.io/${{ github.repository }}-test
-      TEST_IMAGE: ghcr.io/${{ github.repository }}-test:${{ github.run_id }}
+      TEST_REGISTRY: ghcr.io
+      TEST_REPOSITORY: ${{ github.repository }}-test
       TEST_TAG: ${{ github.run_id }}
+      TEST_IMAGE: ghcr.io/${{ github.repository }}-test:${{ github.run_id }}
     steps:
     - uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
@@ -39,7 +40,7 @@ jobs:
       with:
         registry: ghcr.io
         token: ${{ secrets.GHCR_PAT }}
-        repository: ${{ env.TEST_IMAGE }}
+        repository: ${{ env.TEST_REPOSITORY }}
         target: ${{ env.TEST_TAG }}
         tags: |
           multiple-a
@@ -49,7 +50,7 @@ jobs:
         echo "::group::Assertions"
         TAGS=('single' 'multiple-a' 'multiple-b')
         for test_tag in "${TAGS[@]}"
-          image=$TEST_REPOSITORY:$test_tag
+          image=$TEST_REGISTRY/$TEST_REPOSITORY:$test_tag
           if docker manifest inspect $image >/dev/null; then
             echo "::debug::$test_tag found, test passed"
           else
