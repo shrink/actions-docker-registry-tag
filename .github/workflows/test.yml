@@ -16,7 +16,7 @@ jobs:
     env:
       TEST_REPOSITORY: ${{ github.repository }}-test
       TEST_TAG: ${{ github.run_id }}
-      TEST_IMAGE: ${{ github.repository }}-test:${{ github.run_id }}
+      TEST_IMAGE: ghcr.io/${{ github.repository }}-test:${{ github.run_id }}
     steps:
     - uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
