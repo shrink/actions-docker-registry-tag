@@ -14,9 +14,9 @@ jobs:
     # container registry can have, however to avoid any unexpected behaviour
     # we are creating a new image for each run.
     env:
-      TEST_REPOSITORY=${{ github.repository }}-test
-      TEST_TAG=${{ github.run_id }}
-      TEST_IMAGE=${{ github.repository }}-test:${{ github.run_id }}
+      TEST_REPOSITORY: ${{ github.repository }}-test
+      TEST_TAG: ${{ github.run_id }}
+      TEST_IMAGE: ${{ github.repository }}-test:${{ github.run_id }}
     steps:
     - uses: actions/checkout@v2
       # A GitHub Action re-run shares the same run ID as the first run. To avoid
