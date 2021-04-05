@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - '**'
+  schedule:
+    - cron: '*/37 12 * * *'
 
 jobs:
   ghcr:
