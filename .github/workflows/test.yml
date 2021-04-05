@@ -50,12 +50,14 @@ jobs:
         echo "::group::Assertions"
         TAGS=('single' 'multiple-a' 'multiple-b')
         for tag in "${TAGS[@]}"
+        do
           IMAGE="${TEST_REGISTRY}/${TEST_REPOSITORY}:${tag}"
           if docker manifest inspect $IMAGE >/dev/null; then
             echo "::debug::$tag found, test passed"
           else
             echo "::error::$tag not found, test failed"
           fi
+        done
         echo "::endgroup::"
     - name: Clean Up Image
       if: always()
