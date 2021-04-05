@@ -10,13 +10,10 @@ on:
 jobs:
   ghcr:
     runs-on: ubuntu-latest
-    # There is no known limit of the number of tags an image in the GitHub
-    # container registry can have, however to avoid any unexpected behaviour
-    # we are creating a new image for each run.
     env:
-      TEST_REPOSITORY: ${{ github.repository }}-test
-      TEST_TAG: ${{ github.run_id }}
+      TEST_REPOSITORY: ghcr.io/${{ github.repository }}-test
       TEST_IMAGE: ghcr.io/${{ github.repository }}-test:${{ github.run_id }}
+      TEST_TAG: ${{ github.run_id }}
     steps:
     - uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
@@ -25,14 +22,6 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCR_PAT }}
-      # A GitHub Action re-run shares the same run ID as the first run. To avoid
-      # a test unintentionally passing due to tags leaking between re-runs, we
-      # generate a unique value here (using the time of the current run) so that
-      # each run is testing independently.
-    - id: unique
-      uses: nanzm/get-time-action@v1.1
-      with:
-        format: 'YYYYMMDDTHHmmss'
     - run: |
         docker pull hello-world
         docker tag hello-world $TEST_IMAGE
@@ -44,7 +33,7 @@ jobs:
         token: ${{ secrets.GHCR_PAT }}
         repository: ${{ env.TEST_REPOSITORY }}
         target: ${{ env.TEST_TAG }}
-        tags: ${{ steps.unique.outputs.time }}-single
+        tags: single
     - name: Add Multiple Tags
       uses: ./
       with:
@@ -53,19 +42,20 @@ jobs:
         repository: ${{ env.TEST_IMAGE }}
         target: ${{ env.TEST_TAG }}
         tags: |
-          ${{ steps.unique.outputs.time }}-multiple-a
-          ${{ steps.unique.outputs.time }}-multiple-b
+          multiple-a
+          multiple-b
     - name: Assert Image Has Tags
-      env:
-        BASE_TAG: ${{ env.TEST_REPOSITORY }}:${{ steps.unique.outputs.time }}
       run: |
         echo "::group::Assertions"
         TAGS=('single' 'multiple-a' 'multiple-b')
         for test_tag in "${TAGS[@]}"
-          image=$BASE_TAG-$test_tag
+          image=$TEST_REPOSITORY:$test_tag
           if docker manifest inspect $image >/dev/null; then
             echo "::debug::$test_tag found, test passed"
           else
             echo "::error::$test_tag not found, test failed"
           fi
         echo "::endgroup::"
+    - name: Clean Up Image
+      if: always()
+      run: docker rmi --force $TEST_IMAGE
