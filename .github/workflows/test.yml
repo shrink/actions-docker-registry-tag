@@ -49,7 +49,7 @@ jobs:
           ${{ steps.unique.outputs.time }}-multiple-b
     - name: Assert Image Has Tags
       env:
-        BASE_TAG=${{ env.TEST_REPOSITORY }}:${{ steps.unique.outputs.time }}
+        BASE_TAG: ${{ env.TEST_REPOSITORY }}:${{ steps.unique.outputs.time }}
       run: |
         echo "::group::Assertions"
         TAGS=('single' 'multiple-a' 'multiple-b')
