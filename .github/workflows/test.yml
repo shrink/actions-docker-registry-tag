@@ -32,7 +32,7 @@ jobs:
     - id: unique
       uses: nanzm/get-time-action@v1.1
       with:
-        format: 'YYYYMMDDTHHmmssZ'
+        format: 'YYYYMMDDTHHmmss'
     - run: |
         docker pull hello-world
         docker tag hello-world $TEST_IMAGE
