@@ -31,6 +31,8 @@ jobs:
       # each run is testing independently.
     - id: unique
       uses: nanzm/get-time-action@v1.1
+      with:
+        format: 'YYYYMMDDTHHmmssZ'
     - run: |
         docker pull hello-world
         docker tag hello-world $TEST_IMAGE
