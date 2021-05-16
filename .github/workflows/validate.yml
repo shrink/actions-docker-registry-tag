@@ -1,0 +1,19 @@
+name: 'validate'
+
+on: [pull_request]
+
+jobs:
+  is-packaged:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: dist
+        env:
+          BUILD_HASH: ${{ hashFiles('dist') }}
+        run: echo "::set-output name=hash::$BUILD_HASH"
+      - run: npm install
+      - run: npm run all
+      - if: ${{ steps.dist.outputs.hash != hashFiles('dist') }}
+        run: |
+          echo "::error::Action must be packaged (use 'npm run package' locally)"
+          exit 1
