@@ -3,10 +3,16 @@ import {addTags} from './tags'
 
 export async function run(): Promise<void> {
   try {
+    let token = core.getInput('token')
+
+    if (core.getInput('registry') === 'ghcr.io') {
+      token = Buffer.from(token).toString('base64')
+    }
+
     const image = {
       registry: {
         domain: core.getInput('registry'),
-        token: core.getInput('token')
+        token
       },
       target: {
         repository: core.getInput('repository'),
@@ -16,10 +22,21 @@ export async function run(): Promise<void> {
 
     const tags: string[] = core.getInput('tags').split('\n')
 
-    const result = addTags(image, tags)
+    const results = await addTags(image, tags)
 
-    core.setOutput('success', result.success.toString())
-    core.setOutput('tags', result.tags.toString())
+    for (const result of results) {
+      if (result.success === true) {
+        core.info(
+          `${image.target.repository}:${image.target.tag} tagged with ${result.tag}`
+        )
+      }
+
+      if (result.success === false) {
+        core.setFailed(
+          `${image.target.repository}:${image.target.tag} could not be tagged with ${result.tag}`
+        )
+      }
+    }
   } catch (error) {
     core.setFailed(error.message)
   }

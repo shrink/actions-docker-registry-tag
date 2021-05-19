@@ -1,5 +1,4 @@
-import {addTags} from '../src/tags'
-import * as os from 'os'
+import {Image, addTags} from '../src/tags'
 
 jest.mock('../src/tags', () => {
   return {
@@ -7,48 +6,40 @@ jest.mock('../src/tags', () => {
   }
 })
 
+const expectedImageParameters = {
+  registry: {
+    domain: 'registry.example.com',
+    token: 'example-token'
+  },
+  target: {
+    repository: 'examples',
+    tag: 'image'
+  }
+}
+
 describe('action', () => {
   beforeEach(() => {
     process.stdout.write = jest.fn()
   })
 
   test('passes action parameters to tag adder', async () => {
-    process.env['INPUT_REGISTRY'] = 'registry.example.com'
-    process.env['INPUT_TOKEN'] = 'example-token'
-    process.env['INPUT_REPOSITORY'] = 'examples'
-    process.env['INPUT_TARGET'] = 'image'
+    setEnvFromImage(expectedImageParameters)
     process.env['INPUT_TAGS'] = 'x\ny\nz'
-    ;(addTags as jest.MockedFunction<any>).mockReturnValueOnce({
-      success: true,
-      tags: ['x', 'y', 'z']
-    })
+    ;(addTags as jest.MockedFunction<any>).mockReturnValueOnce([])
 
     await require('../src/main')
-
-    const expectedImageParameters = {
-      registry: {
-        domain: 'registry.example.com',
-        token: 'example-token'
-      },
-      target: {
-        repository: 'examples',
-        tag: 'image'
-      }
-    }
 
     expect(addTags).toHaveBeenCalledWith(expectedImageParameters, [
       'x',
       'y',
       'z'
     ])
-
-    assertOutputSet('success', true)
-    assertOutputSet('tags', 'x,y,z')
   })
 })
 
-function assertOutputSet(name: string, value: string | boolean): void {
-  expect(process.stdout.write).toHaveBeenCalledWith(
-    `::set-output name=${name}::${value}${os.EOL}`
-  )
+function setEnvFromImage(image: Image): void {
+  process.env['INPUT_REGISTRY'] = image.registry.domain
+  process.env['INPUT_TOKEN'] = image.registry.token
+  process.env['INPUT_REPOSITORY'] = image.target.repository
+  process.env['INPUT_TARGET'] = image.target.tag
 }

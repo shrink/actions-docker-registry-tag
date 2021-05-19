@@ -20,7 +20,9 @@
   "author": "Samuel Ryan <sam@samryan.co.uk>",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.6"
+    "@actions/core": "^1.2.6",
+    "@types/node-fetch": "^2.5.10",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
