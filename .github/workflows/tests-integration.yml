@@ -15,7 +15,6 @@ jobs:
       TEST_REPOSITORY: "${{ github.repository }}-test"
       TEST_TAG: "${{ github.run_id }}"
       TEST_IMAGE: "ghcr.io/${{ github.repository }}-test:${{ github.run_id }}"
-      TEST_API: "https://ghcr.io/v2/${{ github.repository }}-test"
     steps:
       - uses: actions/checkout@v2
       - name: Log In to GitHub Container Registry
@@ -57,6 +56,6 @@ jobs:
       - name: Assert image has tag ${{ matrix.tag }}
         run: |
           token=$(echo ${{ secrets.GHCR_PAT }} | base64)
-          image=${{ env.TEST_API }}/manifests/${{ matrix.tag }}
+          image="https://ghcr.io/v2/${{ github.repository }}-test/manifests/${{ matrix.tag }}"
           echo $image
           curl -i $image -H 'Authorization: Bearer $token'
