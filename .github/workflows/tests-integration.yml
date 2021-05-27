@@ -51,8 +51,9 @@ jobs:
         run: |
           for tag in {single,multiple-a,multiple-b,not-found}
           do
-            IMAGE=${{ env.TEST_API }}/manifests/${{ env.TEST_IMAGE }}-${tag}
-            if curl $IMAGE -H 'Authorization: Bearer ${{ secrets.GHCR_PAT }}'; then
+            image=${{ env.TEST_API }}/manifests/${tag}
+            echo $image
+            if curl -sf $image -H 'Authorization: Bearer ${{ secrets.GHCR_PAT }}'; then
               echo "pass: $tag found"
             else
               echo "::error::$tag not found, test failed"
