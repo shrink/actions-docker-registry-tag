@@ -49,7 +49,7 @@ jobs:
             ${{ github.run_id }}-multiple-b
       - name: Assert Image in repository has tags
         run: |
-          for tag in {single,multiple-a,multiple-b}
+          for tag in {single,multiple-a,multiple-b,not-found}
           do
             if curl ${TEST_API}/manifests/${TEST_IMAGE}-${tag}  -H 'Authorization: Bearer ${{ secrets.GHCR_PAT }}'; then
               echo "pass: $tag found"
