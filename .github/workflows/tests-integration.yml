@@ -8,7 +8,7 @@ on:
     - cron: "*/37 12 * * *"
 
 jobs:
-  github-container-registry-integration-tests:
+  tag-example-image:
     runs-on: ubuntu-latest
     env:
       TEST_REGISTRY: ghcr.io
@@ -47,15 +47,15 @@ jobs:
           tags: |
             ${{ github.run_id }}-multiple-a
             ${{ github.run_id }}-multiple-b
-      - name: Assert Image in repository has tags
+  assert-tags-exist:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [single, multiple-a, multiple-b, not-found]
+      fail-fast: false
+    steps:
+      - name: Assert image has tag ${{ matrix.tag }}
         run: |
-          for tag in {single,multiple-a,multiple-b,not-found}
-          do
-            image=${{ env.TEST_API }}/manifests/${tag}
-            echo $image
-            if curl -sf $image -H 'Authorization: Bearer ${{ secrets.GHCR_PAT }}'; then
-              echo "pass: $tag found"
-            else
-              echo "::error::$tag not found, test failed"
-            fi
-          done
+          token=$(echo ${{ secrets.GHCR_PAT }} | base64)
+          image=${{ env.TEST_API }}/manifests/${{ matrix.tag }}
+          curl -sf $image -H 'Authorization: Bearer $token'
