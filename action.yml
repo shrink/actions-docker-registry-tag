@@ -18,14 +18,8 @@ inputs:
     description: 'New-line separated list of new tags'
     required: true
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.registry }}
-    - ${{ inputs.token }}
-    - ${{ inputs.repository }}
-    - ${{ inputs.target }}
-    - ${{ inputs.tags }}
+  using: 'node12'
+  main: 'dist/index.js'
 branding:
   icon: 'tag'
   color: 'blue'

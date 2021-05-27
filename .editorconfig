@@ -1,11 +1,11 @@
 root = true
 
 [*]
-end_of_line = lf
 charset = utf-8
-trim_trailing_whitespace = true
+end_of_line = lf
 insert_final_newline = true
+trim_trailing_whitespace = true
 
-[*.{md,yml,sh}]
+[*.{js,json,ts,yml}]
 indent_style = space
 indent_size = 2

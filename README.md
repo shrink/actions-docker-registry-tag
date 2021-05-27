@@ -4,17 +4,18 @@ A GitHub Action for adding many tags to an existing image in a Docker Registry
 _without_ changing the digest, using Docker Registry API V2.
 
 ```yaml
-- name: Tag Release
-  uses: shrink/actions-docker-registry-tag@v1
+- uses: shrink/actions-docker-registry-tag@v2
   with:
     registry: ghcr.io
     token: ${{ secrets.GHCR_PAT }}
-    repository: shrink/example
+    repository: ${{ github.repository }}
     target: sha-${{ github.sha }}
     tags: |
       v1.0.0
       latest
 ```
+
+Jump to [complete examples &rarr;][examples]
 
 ## Inputs
 
@@ -31,3 +32,38 @@ All inputs are required.
 ## Outputs
 
 No outputs.
+
+## Examples
+
+### Tag Image with Semantic Version
+
+Add Semantic Version tag to a commit's image in registry when a new tag is
+pushed to the repository. The target image is assumed to have been tagged with
+`sha-${{ github.sha }}` on build.
+
+```yaml
+name: Tag Image With Version
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  add-version-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - id: version
+        uses: battila7/get-version-action@v2
+      - name: Add Semantic Version tag to Docker Image
+        uses: shrink/actions-docker-registry-tag@v1
+        with:
+          registry: ghcr.io
+          token: "${{ secrets.GHCR_PAT }}"
+          repository: "${{ github.repository }}"
+          target: "sha-${{ github.sha }}"
+          tags: "${{ steps.version.outputs.version }}"
+```
+
+[battila7/get-version-action]: https://github.com/battila7/get-version-action
+[examples]: #examples

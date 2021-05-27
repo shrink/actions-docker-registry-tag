@@ -1,0 +1,14 @@
+name: Tag Release With Aliases
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  aliases:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add major and minor aliases to release
+        uses: haya14busa/action-update-semver@v1
