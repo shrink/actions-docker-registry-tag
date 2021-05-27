@@ -47,8 +47,8 @@ jobs:
           repository: "${{ env.repository }}"
           target: "${{ env.tag }}"
           tags: |
-            "${{ env.tag }}-multiple-a"
-            "${{ env.tag }}-multiple-b"
+            ${{ env.tag }}-multiple-a
+            ${{ env.tag }}-multiple-b
   assert-tags-exist:
     runs-on: ubuntu-latest
     strategy:
