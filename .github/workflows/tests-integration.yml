@@ -51,6 +51,7 @@ jobs:
             ${{ env.tag }}-multiple-b
   assert-tags-exist:
     runs-on: ubuntu-latest
+    needs: [tag-example-image]
     strategy:
       matrix:
         tag: [single, multiple-a, multiple-b, not-found]
@@ -62,6 +63,5 @@ jobs:
     steps:
       - name: Assert image has tag ${{ matrix.tag }}
         run: |
-          token=$(echo -n $token | base64)
-          curl -v $repository/manifests/$tag -H 'Authorization: Bearer $token'
+          curl -v $repository/manifests/$tag -H 'Authorization: Bearer $(echo -n $token | base64)'
 
