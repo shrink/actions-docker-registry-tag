@@ -54,7 +54,7 @@ jobs:
     needs: [tag-example-image]
     strategy:
       matrix:
-        tag: [single, multiple-a, multiple-b, not-found]
+        tag: [single, multiple-a, multiple-b]
       fail-fast: false
     env:
       repository: "https://ghcr.io/v2/${{ github.repository }}-test"
