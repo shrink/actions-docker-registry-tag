@@ -11,41 +11,44 @@ jobs:
   tag-example-image:
     runs-on: ubuntu-latest
     env:
-      TEST_REGISTRY: ghcr.io
-      TEST_REPOSITORY: "${{ github.repository }}-test"
-      TEST_TAG: "${{ github.run_id }}"
-      TEST_IMAGE: "ghcr.io/${{ github.repository }}-test:${{ github.run_id }}"
+      registry: ghcr.io
+      repository: "${{ github.repository }}-test"
+      tag: "${{ github.run_id }}"
+      image: "ghcr.io/${{ github.repository }}-test:${{ github.run_id }}"
+      token: "${{ secrets.GHCR_PAT }}"
+      username: "${{ github.repository_owner }}"
+      password: "${{ secrets.GHCR_PAT }}"
     steps:
       - uses: actions/checkout@v2
       - name: Log In to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          registry: ghcr.io
-          username: "${{ github.repository_owner }}"
-          password: "${{ secrets.GHCR_PAT }}"
+          registry: "${{ env.registry }}"
+          username: "${{ env.username }}"
+          password: "${{ env.password }}"
       - name: Add example image to container registry for test repository
         run: |
           docker pull hello-world
-          docker tag hello-world $TEST_IMAGE
-          docker push $TEST_IMAGE
+          docker tag hello-world ${{ env.image }}
+          docker push ${{ env.image }}
       - name: Add One Tag
         uses: ./
         with:
-          registry: ghcr.io
-          token: "${{ secrets.GHCR_PAT }}"
-          repository: "${{ env.TEST_REPOSITORY }}"
-          target: "${{ env.TEST_TAG }}"
-          tags: "${{ github.run_id }}-single"
+          registry: "${{ env.registry }}"
+          token: "${{ env.token }}"
+          repository: "${{ env.repository }}"
+          target: "${{ env.tag }}"
+          tags: "${{ env.tag }}-single"
       - name: Add Multiple Tags
         uses: ./
         with:
-          registry: ghcr.io
-          token: "${{ secrets.GHCR_PAT }}"
-          repository: "${{ env.TEST_REPOSITORY }}"
-          target: "${{ env.TEST_TAG }}"
+          registry: "${{ env.registry }}"
+          token: "${{ env.token }}"
+          repository: "${{ env.repository }}"
+          target: "${{ env.tag }}"
           tags: |
-            ${{ github.run_id }}-multiple-a
-            ${{ github.run_id }}-multiple-b
+            "${{ env.tag }}-multiple-a"
+            "${{ env.tag }}-multiple-b"
   assert-tags-exist:
     runs-on: ubuntu-latest
     strategy:
@@ -55,8 +58,11 @@ jobs:
     env:
       repository: "https://ghcr.io/v2/${{ github.repository }}-test"
       tag: "${{ github.run_id }}-${{ matrix.tag }}"
+      token: "${{ secrets.GHCR_PAT }}"
     steps:
       - name: Assert image has tag ${{ matrix.tag }}
         run: |
-          token=$(echo ${{ secrets.GHCR_PAT }} | base64)
-          curl -i $repository/manifests/$tag -H 'Authorization: Bearer $token'
+          token=$(echo $token | base64)
+          echo $token
+          curl -I $repository/manifests/$tag -H 'Authorization: Bearer $token'
+
