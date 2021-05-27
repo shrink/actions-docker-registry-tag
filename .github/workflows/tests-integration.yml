@@ -64,5 +64,5 @@ jobs:
       - name: Assert image has tag ${{ matrix.tag }}
         run: |
           token=$(echo -n $token | base64)
-          curl -sf $repository/manifests/$tag -H "Authorization: Bearer $token"
-
+          curl -sf $repository/manifests/$tag -H "Authorization: Bearer $token" \
+          || echo "::error::$tag not found" && exit 1
