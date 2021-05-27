@@ -5,7 +5,7 @@ _without_ changing the digest, using Docker Registry API V2.
 
 ```yaml
 - name: Tag Release
-  uses: shrink/actions-docker-registry-tag@v1
+  uses: shrink/actions-docker-registry-tag@v2
   with:
     registry: ghcr.io
     token: ${{ secrets.GHCR_PAT }}
