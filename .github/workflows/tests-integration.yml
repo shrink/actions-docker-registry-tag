@@ -58,4 +58,5 @@ jobs:
         run: |
           token=$(echo ${{ secrets.GHCR_PAT }} | base64)
           image=${{ env.TEST_API }}/manifests/${{ matrix.tag }}
-          curl -sf $image -H 'Authorization: Bearer $token'
+          echo $image
+          curl -i $image -H 'Authorization: Bearer $token'
