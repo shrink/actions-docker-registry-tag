@@ -52,10 +52,11 @@ jobs:
       matrix:
         tag: [single, multiple-a, multiple-b, not-found]
       fail-fast: false
+    env:
+      repository: "https://ghcr.io/v2/${{ github.repository }}-test"
+      tag: "${{ github.run_id }}-${{ matrix.tag }}"
     steps:
       - name: Assert image has tag ${{ matrix.tag }}
         run: |
           token=$(echo ${{ secrets.GHCR_PAT }} | base64)
-          image="https://ghcr.io/v2/${{ github.repository }}-test/manifests/${{ matrix.tag }}"
-          echo $image
-          curl -i $image -H 'Authorization: Bearer $token'
+          curl -i $repository/manifests/$tag -H 'Authorization: Bearer $token'
