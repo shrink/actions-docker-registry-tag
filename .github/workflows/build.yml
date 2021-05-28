@@ -23,6 +23,6 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           add: "dist"
-          default_author: github-actions
+          default_author: github_actions
           message: "chore: Build and package changes"
           push: true
