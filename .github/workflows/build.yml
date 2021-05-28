@@ -1,0 +1,28 @@
+name: Build Action
+
+on: [pull_request]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: npm install
+      - name: Run unit tests with Jest
+        run: npm run test
+  build-and-push-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: npm install
+      - name: Build (compile, format, lint and package)
+        run: npm run build
+      - name: Push packaged action to branch
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: "dist"
+          default_author: github-actions
+          message: "chore: Build and package changes"
+          push: true

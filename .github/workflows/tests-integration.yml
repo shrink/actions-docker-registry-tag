@@ -1,15 +1,18 @@
 name: Integration Test
 
 on:
-  push:
-    branches:
-      - "**"
   schedule:
     - cron: "*/37 12 * * *"
+  workflow_run:
+    workflows:
+      - Build Action
+    types:
+      - completed
 
 jobs:
   tag-example-image:
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     env:
       registry: ghcr.io
       repository: "${{ github.repository }}-test"
