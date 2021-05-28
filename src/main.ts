@@ -6,7 +6,7 @@ export async function run(): Promise<void> {
     let token = core.getInput('token')
 
     if (core.getInput('registry') === 'ghcr.io') {
-      token = Buffer.from(token).toString('base64')
+      token = Buffer.from(token).toString('base64');
     }
 
     const image = {
