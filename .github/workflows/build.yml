@@ -7,22 +7,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: npm install
+      - run: npm install
       - name: Run unit tests with Jest
         run: npm run test
+  style-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - name: Lint and format sourcecode
+        run: npm run style
+      - name: Push style changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: "src"
+          default_author: github_actions
+          message: "style: Lint and format source"
+          push: true
   build-and-push-changes:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: npm install
-      - name: Build (compile, format, lint and package)
+      - name: Compile and package action
         run: npm run build
       - name: Push packaged action to branch
         uses: EndBug/add-and-commit@v7
         with:
           add: "dist"
           default_author: github_actions
-          message: "chore: Build and package changes"
+          message: "build: Build and package changes"
           push: true
