@@ -1,13 +1,16 @@
 name: Integration Test
 
 on:
-  schedule:
-    - cron: "*/37 12 * * *"
+  push:
+    branches:
+      - main
   workflow_run:
     workflows:
       - Build Action
     types:
       - completed
+  schedule:
+    - cron: "*/37 12 * * *"
 
 jobs:
   tag-example-image:
