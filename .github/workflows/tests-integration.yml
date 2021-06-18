@@ -69,7 +69,7 @@ jobs:
       fail-fast: false
     env:
       repository: "https://ghcr.io/v2/${{ github.repository }}"
-      tag: "${{ github.run_id }}-${{ matrix.tag }}"
+      tag: "test-${{ github.run_id }}-${{ matrix.tag }}"
       token: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: Assert image has tag ${{ matrix.tag }}
