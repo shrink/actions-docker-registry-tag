@@ -5,13 +5,10 @@
   "scripts": {
     "compile": "tsc",
     "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "npm run compile && ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "style": "npm run format && npm run lint",
-    "build": "npm run compile && npm run format && npm run lint && npm run package",
-    "all": "npm run build && npm test"
+    "style": "npm run format && npm run lint"
   },
   "keywords": [
     "actions",
