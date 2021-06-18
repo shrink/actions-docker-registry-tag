@@ -19,7 +19,6 @@ env:
 jobs:
   tag-example-image:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v2
       - name: Install Javascript dependencies via npm
