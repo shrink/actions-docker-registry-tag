@@ -19,9 +19,9 @@ this action, please reference by tag or commit hash in your Workflows.
 
 ## Inputs
 
-Token is an optional input for GitHub's Container Registry. Ensure the token has
-permission to write by granting Access as described in
-["About GitHub Packages with GitHub Actions"][docs/package-access].
+Token is an optional input for GitHub's Container Registry. Ensure the Actions
+token has permission to write to the package repository by granting access as
+described in ["About GitHub Packages with GitHub Actions"][docs/package-access].
 
 | ID               | Description                                          | Examples                    |
 | ---------------- | ---------------------------------------------------- | --------------------------- |
