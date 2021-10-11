@@ -13,8 +13,8 @@ env:
   tag: "test-${{ github.run_id }}"
   image: "ghcr.io/${{ github.repository }}:test-${{ github.run_id }}"
   username: "${{ github.repository_owner }}"
-  password: "${{ secrets.GITHUB_TOKEN }}"
-  token: "${{ secrets.GITHUB_TOKEN }}"
+  password: "${{ github.token }}"
+  token: "${{ github.token }}"
 
 jobs:
   tag-example-image:
@@ -70,7 +70,6 @@ jobs:
     env:
       repository: "https://ghcr.io/v2/${{ github.repository }}"
       tag: "test-${{ github.run_id }}-${{ matrix.tag }}"
-      token: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - name: Assert image has tag ${{ matrix.tag }}
         run: |
