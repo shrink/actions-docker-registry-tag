@@ -7,7 +7,6 @@ _without_ changing the digest, using Docker Registry API V2.
 - uses: shrink/actions-docker-registry-tag@v2
   with:
     registry: ghcr.io
-    token: ${{ secrets.GHCR_PAT }}
     repository: ${{ github.repository }}
     target: sha-${{ github.sha }}
     tags: |
@@ -20,15 +19,17 @@ this action, please reference by tag or commit hash in your Workflows.
 
 ## Inputs
 
-All inputs are required.
+Token is an optional input for GitHub's Container Registry. Ensure the token has
+permission to write by granting Access as described in
+["About GitHub Packages with GitHub Actions"][docs/package-access].
 
-| ID  | Description | Examples |
-| --- | ----------- | -------- |
-| `registry` | Registry API root domain | `ghcr.io` `index.docker.io` |
-| `token` | Bearer token for the Registry API | `${{ secrets.GHCR_PAT }}` |
-| `repository` | Image repository name | `shrink/example` |
-| `target` | Tag of the existing image | `branch-name` `sha-1150f2f` |
-| `tags` | Tag(s) to add to the target (new-line delimited) | `v1.0.1` `latest` |
+| ID               | Description                                          | Examples                    |
+| ---------------- | ---------------------------------------------------- | --------------------------- |
+| **`registry`**   | **Registry API root domain**                         | `ghcr.io` `index.docker.io` |
+| `token`          | Bearer token for the Registry API                    | `${{ secrets.DOCKER_KEY }}` |
+| **`repository`** | **Image repository name**                            | `shrink/example`            |
+| **`target`**     | **Tag of the existing image**                        | `branch-name` `sha-1150f2f` |
+| **`tags`**       | **Tag(s) to add to the target (new-line delimited)** | `v1.0.1` `latest`           |
 
 ## Outputs
 
@@ -48,7 +49,7 @@ name: Tag Image With Version
 on:
   push:
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
 
 jobs:
   add-version-tag:
@@ -60,10 +61,9 @@ jobs:
         uses: shrink/actions-docker-registry-tag@v1
         with:
           registry: ghcr.io
-          token: "${{ secrets.GHCR_PAT }}"
-          repository: "${{ github.repository }}"
-          target: "sha-${{ github.sha }}"
-          tags: "${{ steps.version.outputs.version }}"
+          repository: '${{ github.repository }}'
+          target: 'sha-${{ github.sha }}'
+          tags: '${{ steps.version.outputs.version }}'
 ```
 
 ## Automatic Release Packaging
@@ -87,3 +87,4 @@ describes how this achieved.
 [examples]: #examples
 [blog/package-automatically]: https://medium.com/prompt/package-github-actions-automatically-with-github-actions-a70b9f7bae4
 [tags]: https://github.com/shrink/actions-docker-registry-tag/tags
+[docs/package-access]: https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#upgrading-a-workflow-that-accesses-ghcrio

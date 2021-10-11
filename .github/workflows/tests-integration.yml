@@ -42,7 +42,6 @@ jobs:
         uses: ./
         with:
           registry: "${{ env.registry }}"
-          token: "${{ env.token }}"
           repository: "${{ env.repository }}"
           target: "${{ env.tag }}"
           tags: "${{ env.tag }}-single"
@@ -50,7 +49,6 @@ jobs:
         uses: ./
         with:
           registry: "${{ env.registry }}"
-          token: "${{ env.token }}"
           repository: "${{ env.repository }}"
           target: "${{ env.tag }}"
           tags: |
