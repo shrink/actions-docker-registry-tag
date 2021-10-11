@@ -1,25 +1,26 @@
-name: 'Docker Registry Tag'
-description: 'Add many tags to an image in a Docker Registry (retag, re-tag)'
-author: 'Samuel Ryan <sam@samryan.co.uk>'
+name: "Docker Registry Tag"
+description: "Add many tags to an image in a Docker Registry (retag, re-tag)"
+author: "Samuel Ryan <sam@samryan.co.uk>"
 inputs:
   registry:
-    description: 'Registry API root domain'
+    description: "Registry API root domain"
     required: true
   token:
-    description: 'Bearer token for the Registry API'
+    description: "Bearer token for the Registry API"
     required: true
+    default: "${{ github.token }}"
   repository:
-    description: 'Image repository name'
+    description: "Image repository name"
     required: true
   target:
-    description: 'Tag of the existing image'
+    description: "Tag of the existing image"
     required: true
   tags:
-    description: 'New-line separated list of new tags'
+    description: "New-line separated list of new tags"
     required: true
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
 branding:
-  icon: 'tag'
-  color: 'blue'
+  icon: "tag"
+  color: "blue"
