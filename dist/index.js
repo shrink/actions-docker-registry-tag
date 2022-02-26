@@ -83,6 +83,25 @@ run();
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -98,16 +117,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.addTags = void 0;
 const node_fetch_1 = __importDefault(__webpack_require__(467));
+const core = __importStar(__webpack_require__(186));
 function addTags(image, tags) {
     return __awaiter(this, void 0, void 0, function* () {
+        const manifestTypes = [
+            "docker.distribution.manifest.v1",
+            "docker.distribution.manifest.v2",
+            "docker.distribution.manifest.list.v2",
+            "oci.image.manifest.v1",
+            "oci.image.index.v1",
+        ];
         const headers = {
-            authorization: `Bearer ${image.registry.token}`
+            authorization: `Bearer ${image.registry.token}`,
+            accept: manifestTypes.map((type) => `application/vnd.${type}+json`).join(","),
         };
         const manifest = yield node_fetch_1.default(manifestUrl(image, image.target.tag), {
             method: 'GET',
             headers
         });
         if (manifest.status !== 200) {
+            core.debug(yield manifest.json());
             throw new Error(`${image.target.repository}:${image.target.tag} not found.`);
         }
         const mediaType = manifest.headers.get('Content-Type');
