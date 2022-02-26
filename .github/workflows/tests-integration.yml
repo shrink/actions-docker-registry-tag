@@ -86,6 +86,7 @@ jobs:
   tag-oci-image:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Copy OCI image to repository
         run: |
           token=$(echo -n $token | base64)
