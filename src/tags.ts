@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import * as core from '@actions/core'
 
 interface Registry {
   domain: string
@@ -21,8 +22,17 @@ interface Result {
 }
 
 export async function addTags(image: Image, tags: string[]): Promise<Result[]> {
+  const manifestTypes = [
+    "docker.distribution.manifest.v1",
+    "docker.distribution.manifest.v2",
+    "docker.distribution.manifest.list.v2",
+    "oci.image.manifest.v1",
+    "oci.image.index.v1",
+  ];
+
   const headers = {
-    authorization: `Bearer ${image.registry.token}`
+    authorization: `Bearer ${image.registry.token}`,
+    accept: manifestTypes.map((type) => `application/vnd.${type}+json`).join(","),
   }
 
   const manifest = await fetch(manifestUrl(image, image.target.tag), {
@@ -31,6 +41,7 @@ export async function addTags(image: Image, tags: string[]): Promise<Result[]> {
   })
 
   if (manifest.status !== 200) {
+    core.debug(await manifest.json());
     throw new Error(`${image.target.repository}:${image.target.tag} not found.`)
   }
 
