@@ -54,6 +54,21 @@ jobs:
           tags: |
             ${{ env.tag }}-multiple-a
             ${{ env.tag }}-multiple-b
+      - name: Add example OCI image to container registry
+        run: |
+          token=$(echo -n $token | base64)
+          skopeo copy --all \
+          "docker://docker.io/library/hello-world:latest" \
+          "docker://${{ env.image }}-oci" \
+          --dest-registry-token $token \
+          -f oci
+      - name: Add signle tag to OCI image
+        uses: ./
+        with:
+          registry: "${{ env.registry }}"
+          repository: "${{ env.repository }}"
+          target: "${{ env.tag }}-oci"
+          tags: "${{ env.tag }}-oci-single"
   assert-tags-exist:
     runs-on: ubuntu-latest
     needs:
@@ -83,22 +98,3 @@ jobs:
           -H "Authorization: Bearer $token" \
           -H "Accept: application/vnd.$version+json" \
           || (echo "::error::$tag not found" && exit 1)
-  tag-oci-image:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Copy OCI image to repository
-        run: |
-          token=$(echo -n $token | base64)
-          skopeo copy --all \
-          "docker://docker.io/library/hello-world:latest" \
-          "docker://${{ env.image }}-oci" \
-          --dest-registry-token $token \
-          -f oci
-      - name: Add tag to OCI image
-        uses: ./
-        with:
-          registry: "${{ env.registry }}"
-          repository: "${{ env.repository }}"
-          target: "${{ env.tag }}-oci"
-          tags: "${{ env.tag }}-oci-single"
