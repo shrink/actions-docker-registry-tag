@@ -1,23 +1,11 @@
 {
-  "name": "update-registry-tag",
-  "description": "Update Docker Registry",
-  "main": "lib/main.js",
-  "scripts": {
-    "build": "tsc && jest --coverage",
-    "lint": "eslint src/**/*.ts",
-    "package": "npm run compile && ncc build --source-map --license licenses.txt"
-  },
-  "keywords": [
-    "actions",
-    "github-actions",
-    "docker"
-  ],
   "author": "Theia Scientific, LLC",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@types/node-fetch": "^2.5.10",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^2.6.7"
   },
+  "description": "Update Docker Registry",
   "devDependencies": {
     "@types/jest": "^28.1.8",
     "@types/node": "^18.7.13",
@@ -31,5 +19,16 @@
     "js-yaml": "^4.1.0",
     "ts-jest": "^28.0.8",
     "typescript": "^4.1.3"
+  },
+  "keywords": [
+    "actions",
+    "github-actions",
+    "docker"
+  ],
+  "name": "update-registry-tag",
+  "scripts": {
+    "build": "tsc && jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "package": "npm run compile && ncc build --source-map --license licenses.txt"
   }
 }
