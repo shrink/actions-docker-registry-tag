@@ -1,6 +1,6 @@
 # Update Docker Registry Tag
 
-A GitHub Action for adding many tags to an existing image in a Docker Registry using Docker Registry API V2.
+A GitHub Action for adding tags to an existing image in a Docker Registry using Docker Registry API V2.
 
 ## Inputs
 
@@ -15,7 +15,7 @@ A GitHub Action for adding many tags to an existing image in a Docker Registry u
 ## Workflow Example
 
 ```yaml
-- uses: Theia-Scientific//update-registry-tag@v1
+- uses: Theia-Scientific/update-registry-tag@v1
   with:
     registry: ghcr.io
     token: ${{ secrets.GITHUB_TOKEN }}
