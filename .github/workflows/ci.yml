@@ -52,13 +52,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build and test frontend
-        env:
-          NODE_OPTIONS: '--max-old-space-size=4096'
+      - name: Build and test action
         run: yarn build
-
-      - name: Execute unit tests
-        run: yarn test
 
       - name: Log In to GitHub Container Registry
         uses: docker/login-action@v1
