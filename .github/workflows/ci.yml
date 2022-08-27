@@ -10,9 +10,9 @@ on:
 
 env:
   registry: ghcr.io
-  repository: '${{ github.repository }}'
+  package: '${{ github.repository }}'
   tag: 'test-${{ github.run_id }}'
-  image: 'ghcr.io/${{ github.repository }}:test-${{ github.run_id }}'
+  image: 'ghcr.io/theia-scientific/update-registry-tag:test-${{ github.run_id }}'
 
 jobs:
   build:
@@ -70,7 +70,7 @@ jobs:
         uses: ./
         with:
           registry: '${{ env.registry }}'
-          repository: '${{ env.repository }}'
+          package: '${{ env.package }}'
           target: '${{ env.tag }}'
           tags: '${{ env.tag }}-single'
 
@@ -78,7 +78,7 @@ jobs:
         uses: ./
         with:
           registry: '${{ env.registry }}'
-          repository: '${{ env.repository }}'
+          package: '${{ env.package }}'
           target: '${{ env.tag }}'
           tags: |
             ${{ env.tag }}-multiple-a

@@ -24,8 +24,8 @@ const main = async (): Promise<void> => {
       token
     },
     target: {
-      repository: core.getInput('repository'),
-      tag: core.getInput('target')
+      package: core.getInput('package'),
+      target: core.getInput('target')
     }
   }
 
@@ -45,14 +45,14 @@ const main = async (): Promise<void> => {
   results.forEach((result: Result) => {
     if (result.success === true) {
       core.info(
-        `${image.target.repository}:${image.target.tag} tagged with ${result.tag}`
+        `${image.target.package}:${image.target.target} tagged with ${result.tag}`
       )
 
       return
     }
 
     core.setFailed(
-      `${image.target.repository}:${image.target.tag} could not be tagged with ${result.tag}`
+      `${image.target.package}:${image.target.target} could not be tagged with ${result.tag}`
     )
   })
 }

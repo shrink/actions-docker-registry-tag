@@ -25,10 +25,11 @@
     "github-actions",
     "docker"
   ],
+  "main": "dist/main.js",
   "name": "update-registry-tag",
   "scripts": {
     "build": "tsc && jest --coverage",
     "lint": "eslint src/**/*.ts",
-    "package": "npm run compile && ncc build --source-map --license licenses.txt"
+    "package": "npm run build && ncc build --source-map --license licenses.txt"
   }
 }

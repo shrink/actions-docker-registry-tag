@@ -42,7 +42,9 @@ const core = __importStar(require("@actions/core"));
  * Manifest URL
  */
 const manifestUrl = (image, tag) => {
-    return `https://${image.registry.domain}/v2/${image.target.repository}/manifests/${tag}`;
+    const url = `https://${image.registry.domain}/v2/${image.target.package}/manifests/${tag}`;
+    console.log(`URL: ${url}`);
+    return url;
 };
 /**
  * Add Tags
@@ -68,7 +70,7 @@ const addTags = (image, tags) => __awaiter(void 0, void 0, void 0, function* () 
     /**
      * Manifest
      */
-    const manifest = yield (0, node_fetch_1.default)(manifestUrl(image, image.target.tag), {
+    const manifest = yield (0, node_fetch_1.default)(manifestUrl(image, image.target.target), {
         method: 'GET',
         headers
     });
@@ -77,7 +79,7 @@ const addTags = (image, tags) => __awaiter(void 0, void 0, void 0, function* () 
      */
     if (manifest.status !== 200) {
         core.debug((yield manifest.json()));
-        throw new Error(`${image.target.repository}:${image.target.tag} not found.`);
+        throw new Error(`${image.target.package}:${image.target.target} not found.`);
     }
     const mediaType = manifest.headers.get('Content-Type');
     const targetManifest = yield manifest.text();

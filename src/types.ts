@@ -22,18 +22,18 @@ export interface Registry {
  */
 export interface Target {
   /**
-   * Repository
+   * Package
    *
    * @type {string}
    */
-  repository: string
+  package: string
 
   /**
-   * Tag
+   * Target
    *
    * @type {string}
    */
-  tag: string
+  target: string
 }
 
 /**

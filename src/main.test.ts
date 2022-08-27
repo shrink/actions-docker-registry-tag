@@ -19,8 +19,8 @@ const image: Image = {
     token: 'example-token'
   },
   target: {
-    repository: 'examples',
-    tag: 'image'
+    package: 'example',
+    target: 'image'
   }
 }
 
@@ -35,8 +35,8 @@ describe('action', () => {
   test('passes action parameters to tag adder', async () => {
     process.env['INPUT_REGISTRY'] = image.registry.domain
     process.env['INPUT_TOKEN'] = image.registry.token
-    process.env['INPUT_REPOSITORY'] = image.target.repository
-    process.env['INPUT_TARGET'] = image.target.tag
+    process.env['INPUT_PACKAGE'] = image.target.package
+    process.env['INPUT_TARGET'] = image.target.target
 
     process.env['INPUT_TAGS'] = 'x\ny\nz'
     ;(addTags as jest.MockedFunction<any>).mockReturnValueOnce([])

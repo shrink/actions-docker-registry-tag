@@ -9,18 +9,18 @@ inputs:
     description: 'Bearer token for the Registry API'
     required: true
     default: '${{ github.token }}'
-  repository:
-    description: 'Image repository name'
+  package:
+    description: 'Package name'
     required: true
   target:
-    description: 'Tag of the existing image'
+    description: 'Target Tag'
     required: true
   tags:
     description: 'New-line separated list of new tags'
     required: true
 runs:
   using: 'node16'
-  main: 'dist/main.js'
+  main: 'dist/index.js'
 branding:
   icon: 'tag'
   color: 'blue'

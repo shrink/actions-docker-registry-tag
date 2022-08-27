@@ -54,8 +54,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             token
         },
         target: {
-            repository: core.getInput('repository'),
-            tag: core.getInput('target')
+            package: core.getInput('package'),
+            target: core.getInput('target')
         }
     };
     /**
@@ -71,10 +71,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
      */
     results.forEach((result) => {
         if (result.success === true) {
-            core.info(`${image.target.repository}:${image.target.tag} tagged with ${result.tag}`);
+            core.info(`${image.target.package}:${image.target.target} tagged with ${result.tag}`);
             return;
         }
-        core.setFailed(`${image.target.repository}:${image.target.tag} could not be tagged with ${result.tag}`);
+        core.setFailed(`${image.target.package}:${image.target.target} could not be tagged with ${result.tag}`);
     });
 });
 /**

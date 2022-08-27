@@ -6,7 +6,10 @@ import { Image, Result } from './types';
  * Manifest URL
  */
 const manifestUrl = (image: Image, tag: string): string => {
-  return `https://${image.registry.domain}/v2/${image.target.repository}/manifests/${tag}`
+  const url = `https://${image.registry.domain}/v2/${image.target.package}/manifests/${tag}`
+  console.log(`URL: ${url}`)
+
+  return url
 }
 
 /**
@@ -38,7 +41,7 @@ export const addTags = async (
   /**
    * Manifest
    */
-  const manifest = await fetch(manifestUrl(image, image.target.tag), {
+  const manifest = await fetch(manifestUrl(image, image.target.target), {
     method: 'GET',
     headers
   })
@@ -48,7 +51,7 @@ export const addTags = async (
    */
   if (manifest.status !== 200) {
     core.debug((await manifest.json()) as string)
-    throw new Error(`${image.target.repository}:${image.target.tag} not found.`)
+    throw new Error(`${image.target.package}:${image.target.target} not found.`)
   }
 
   const mediaType = manifest.headers.get('Content-Type')
@@ -65,16 +68,14 @@ export const addTags = async (
    * Add Tags
    */
   return await Promise.all(
-    tags.map(
-      async (tag: string): Promise<Result> => {
-        const result = await fetch(manifestUrl(image, tag), {
-          method: 'PUT',
-          headers,
-          body: targetManifest
-        })
+    tags.map(async (tag: string): Promise<Result> => {
+      const result = await fetch(manifestUrl(image, tag), {
+        method: 'PUT',
+        headers,
+        body: targetManifest
+      })
 
-        return {tag, success: result.status === 201}
-      }
-    )
+      return {tag, success: result.status === 201}
+    })
   )
 }
