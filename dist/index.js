@@ -196,6 +196,10 @@ const addTags = (image, tags) => __awaiter(void 0, void 0, void 0, function* () 
      * Add Tags
      */
     return yield Promise.all(tags.map((tag) => __awaiter(void 0, void 0, void 0, function* () {
+        /**
+         * Remove `^v` at the beginning if tag is version
+         */
+        tag = tag.replace(/^v/, '');
         const result = yield (0, node_fetch_1.default)(manifestUrl(image, tag), {
             method: 'PUT',
             headers,

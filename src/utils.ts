@@ -69,6 +69,11 @@ export const addTags = async (
    */
   return await Promise.all(
     tags.map(async (tag: string): Promise<Result> => {
+      /**
+       * Remove `^v` at the beginning if tag is version
+       */
+      tag = tag.replace(/^v/, '')
+
       const result = await fetch(manifestUrl(image, tag), {
         method: 'PUT',
         headers,

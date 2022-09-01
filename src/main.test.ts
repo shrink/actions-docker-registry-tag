@@ -32,7 +32,7 @@ describe('action', () => {
     process.stdout.write = jest.fn()
   })
 
-  test('passes action parameters to tag adder', async () => {
+  test('passes action parameters to tag added', async () => {
     process.env['INPUT_REGISTRY'] = image.registry.domain
     process.env['INPUT_TOKEN'] = image.registry.token
     process.env['INPUT_PACKAGE'] = image.target.package
