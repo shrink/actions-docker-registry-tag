@@ -121,15 +121,15 @@ const core = __importStar(__webpack_require__(186));
 function addTags(image, tags) {
     return __awaiter(this, void 0, void 0, function* () {
         const manifestTypes = [
-            "docker.distribution.manifest.v1",
-            "docker.distribution.manifest.v2",
-            "docker.distribution.manifest.list.v2",
-            "oci.image.manifest.v1",
-            "oci.image.index.v1",
+            'docker.distribution.manifest.v1',
+            'docker.distribution.manifest.v2',
+            'docker.distribution.manifest.list.v2',
+            'oci.image.manifest.v1',
+            'oci.image.index.v1'
         ];
         const headers = {
             authorization: `Bearer ${image.registry.token}`,
-            accept: manifestTypes.map((type) => `application/vnd.${type}+json`).join(","),
+            accept: manifestTypes.map(type => `application/vnd.${type}+json`).join(',')
         };
         const manifest = yield node_fetch_1.default(manifestUrl(image, image.target.tag), {
             method: 'GET',
@@ -151,6 +151,9 @@ function addTags(image, tags) {
                     headers,
                     body: targetManifest
                 });
+                if (result.status !== 201) {
+                    core.debug(yield result.json());
+                }
                 return { tag, success: result.status === 201 };
             });
         }));
