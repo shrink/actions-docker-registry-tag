@@ -11,7 +11,8 @@ env:
   registry: ghcr.io
   repository: "${{ github.repository }}"
   tag: "test-${{ github.run_id }}"
-  image: "ghcr.io/${{ github.repository }}:test-${{ github.run_id }}"
+  image-writable: "ghcr.io/${{ github.repository }}:test-${{ github.run_id }}"
+  image-unwritable: "ghcr.io/${{ github.repository }}-unwritable:test-${{ github.run_id }}"
   username: "${{ github.repository_owner }}"
   password: "${{ github.token }}"
   token: "${{ github.token }}"
@@ -36,8 +37,8 @@ jobs:
       - name: Add example image to container registry for test repository
         run: |
           docker pull hello-world
-          docker tag hello-world ${{ env.image }}
-          docker push ${{ env.image }}
+          docker tag hello-world ${{ env.image-writable }}
+          docker push ${{ env.image-writable }}
       - name: Add One Tag
         uses: ./
         with:
@@ -59,7 +60,7 @@ jobs:
           token=$(echo -n $token | base64)
           skopeo copy --all \
           "docker://docker.io/library/hello-world:latest" \
-          "docker://${{ env.image }}-oci" \
+          "docker://${{ env.image-writable }}-oci" \
           --dest-registry-token $token \
           -f oci
       - name: Add signle tag to OCI image
@@ -97,3 +98,23 @@ jobs:
           -H "Authorization: Bearer $token" \
           -H "Accept: application/vnd.$version+json" \
           || (echo "::error::$tag not found" && exit 1)
+  try-to-tag-unwritable-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log In to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: "${{ env.registry }}"
+          username: "${{ env.username }}"
+          password: "${{ env.password }}"
+      - id: write-image
+        name: Attempt to write image that cannot be written to
+        continue-on-error: true
+        run: |
+          docker pull hello-world
+          docker tag hello-world ${{ env.image-unwritable }}
+          docker push ${{ env.image-unwritable }}
+      - if: steps.write-image.outcome != 'failure'
+        uses: actions/github-script@v3
+        with:
+          script: core.setFailed('Did not throw error when trying to write an unwritable image')
