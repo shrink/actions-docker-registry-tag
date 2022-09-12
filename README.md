@@ -54,6 +54,8 @@ on:
 jobs:
   add-version-tag:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - id: version
         uses: battila7/get-version-action@v2
