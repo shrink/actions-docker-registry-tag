@@ -107,13 +107,14 @@ jobs:
           registry: "${{ env.registry }}"
           username: "${{ env.username }}"
           password: "${{ env.password }}"
-      - name: Attempt to write image that cannot be written to
+      - id: write-image
+        name: Attempt to write image that cannot be written to
         continue-on-error: true
         run: |
           docker pull hello-world
           docker tag hello-world ${{ env.image-unwritable }}
           docker push ${{ env.image-unwritable }}
-      - if: ${{ success() }}
+      - if: steps.write-image.outcome != 'success'
         uses: actions/github-script@v3
         with:
           script: core.setFailed('Did not throw error when trying to write an unwritable image')
