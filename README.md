@@ -17,6 +17,8 @@ _without_ changing the digest, using Docker Registry API V2.
 :package: [Automatic Release Packaging](#automatic-release-packaging) is used by
 this action, please reference by tag or commit hash in your Workflows.
 
+## Permissions
+
 ## Inputs
 
 Token is an optional input for GitHub's Container Registry. Ensure the Actions
