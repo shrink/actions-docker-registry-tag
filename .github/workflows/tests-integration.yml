@@ -21,7 +21,7 @@ jobs:
   tag-example-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Javascript dependencies via npm
         if: ${{ github.ref != 'refs/heads/release' }}
         run: npm install
