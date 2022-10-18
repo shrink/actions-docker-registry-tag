@@ -4,7 +4,7 @@ A GitHub Action for adding many tags to an existing image in a Docker Registry
 _without_ changing the digest, using Docker Registry API V2.
 
 ```yaml
-- uses: shrink/actions-docker-registry-tag@v2
+- uses: shrink/actions-docker-registry-tag@v3
   with:
     registry: ghcr.io
     repository: ${{ github.repository }}
@@ -58,7 +58,7 @@ jobs:
       - id: version
         uses: battila7/get-version-action@v2
       - name: Add Semantic Version tag to Docker Image
-        uses: shrink/actions-docker-registry-tag@v1
+        uses: shrink/actions-docker-registry-tag@v3
         with:
           registry: ghcr.io
           repository: '${{ github.repository }}'
@@ -73,9 +73,9 @@ Any reference to this Action in a Workflow must use a [tag][tags] (mutable) or
 the commit hash of a tag (immutable).
 
 ```yaml
-✅ uses: shrink/actions-docker-registry-tag@v1
-✅ uses: shrink/actions-docker-registry-tag@v1.0.0
-✅ uses: shrink/actions-docker-registry-tag@d5a9dba6524b17757be591ad59a518dd28419f62
+✅ uses: shrink/actions-docker-registry-tag@v3
+✅ uses: shrink/actions-docker-registry-tag@v3.0.0
+✅ uses: shrink/actions-docker-registry-tag@57e97909852876c02080eff4d73b2e5e779b845b
 ❌ uses: shrink/actions-docker-registry-tag@main
 ```
 
