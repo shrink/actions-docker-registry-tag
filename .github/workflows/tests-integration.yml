@@ -3,9 +3,6 @@ name: "Test Action (Integration)"
 on:
   schedule:
     - cron: "*/37 12 * * *"
-  push:
-    branches:
-      - "**"
 
 env:
   registry: ghcr.io
@@ -21,7 +18,7 @@ jobs:
   tag-example-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Javascript dependencies via npm
         if: ${{ github.ref != 'refs/heads/release' }}
         run: npm install
@@ -29,7 +26,7 @@ jobs:
         if: ${{ github.ref != 'refs/heads/release' }}
         run: npm run package
       - name: Log In to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: "${{ env.registry }}"
           username: "${{ env.username }}"
@@ -102,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Log In to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: "${{ env.registry }}"
           username: "${{ env.username }}"
