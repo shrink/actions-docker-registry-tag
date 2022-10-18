@@ -1,6 +1,7 @@
 name: "Test Action (Unit)"
 
 on:
+  pull_request:
   push:
     branches:
       - "**"

@@ -3,9 +3,6 @@ name: "Test Action (Integration)"
 on:
   schedule:
     - cron: "*/37 12 * * *"
-  push:
-    branches:
-      - "**"
 
 env:
   registry: ghcr.io
