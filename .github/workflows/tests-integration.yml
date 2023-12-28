@@ -55,9 +55,14 @@ jobs:
           tags: |
             ${{ env.tag }}-multiple-a
             ${{ env.tag }}-multiple-b
+      - name: Install latest Skopeo
+        run: |
+          echo 'deb http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:alvistack.list
+          curl -fsSL https://download.opensuse.org/repositories/home:alvistack/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_alvistack.gpg > /dev/null
+          sudo apt update
+          sudo apt install skopeo
       - name: Add example OCI image to container registry
         run: |
-          sudo apt update && sudo apt install -y skopeo
           token=$(echo -n $token | base64)
           skopeo copy --all \
           "docker://docker.io/library/hello-world:latest" \
