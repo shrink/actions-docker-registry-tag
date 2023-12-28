@@ -54,6 +54,7 @@ jobs:
             ${{ env.tag }}-multiple-b
       - name: Add example OCI image to container registry
         run: |
+          sudo apt update && sudo apt install -y skopeo
           token=$(echo -n $token | base64)
           skopeo copy --all \
           "docker://docker.io/library/hello-world:latest" \
