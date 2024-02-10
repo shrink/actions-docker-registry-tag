@@ -1,6 +1,7 @@
 # Update Docker Registry Tag
 
-A GitHub Action for adding tags to an existing image in a Docker Registry using Docker Registry API V2.
+A GitHub Action for adding tags to an existing image in a Docker Registry using
+Docker Registry API V2.
 
 ## Inputs
 
