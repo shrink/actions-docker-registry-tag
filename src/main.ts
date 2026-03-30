@@ -37,8 +37,12 @@ export async function run(): Promise<void> {
         )
       }
     }
-  } catch (error) {
-    core.setFailed(error.message)
+  } catch (error: unknown) {
+    core.setFailed(
+      error instanceof Error
+        ? error.message
+        : 'an unknown error occurred when running actions-docker-registry-tag'
+    )
   }
 }
 
